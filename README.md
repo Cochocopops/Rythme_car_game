@@ -43,23 +43,23 @@ Le projet nécessite les dépendances suivantes (listées dans `requirements.txt
 Installez les dépendances avec :
 ```bash
 pip install -r requirements.txt
-
+```
 ---
 
-# Instructions de jeu
+## Instructions de jeu
 
-## Navigation dans le menu :
-- **Entrez votre nom et votre âge.**
-- Cliquez sur **"Play"** ou appuyez sur **Entrée** pour commencer la partie.
-- Accédez aux **5 meilleurs scores** en cliquant sur le bouton **"Scores"**.
+### Navigation dans le menu :
+- Entrez votre nom et votre âge.
+- Cliquez sur **"Play"** ou appuyez sur Entrée pour commencer la partie.
+- Accédez aux 5 meilleurs scores en cliquant sur le bouton **"Scores"**.
 
-## Contrôles du jeu :
+### Contrôles du jeu :
 - **Déplacer la voiture à gauche** : Flèche gauche.
 - **Déplacer la voiture à droite** : Flèche droite.
 - **Pause/Reprendre** : Barre d'espace.
-- **Retourner au menu** : Touche Entrée (après **"Game Over"**).
+- **Retourner au menu** : Touche Entrée (après *"Game Over"*).
 
-## Objectif :
+### Objectif :
 Évitez les collisions et obtenez le score le plus élevé possible.
 
 ---
@@ -69,13 +69,13 @@ pip install -r requirements.txt
 ### Assets utilisés :
 - **Fond GIF** : `data/assets/Intro.gif`
 - **Musique** :
-  - **Menu** : `data/audio/Night Rider.mp3`
-  - **Jeu** : `data/audio/Game.mp3`
-  - **Collision** : `data/audio/Explosion.mp3`
+  - Menu : `data/audio/Night Rider.mp3`
+  - Jeu : `data/audio/Game.mp3`
+  - Collision : `data/audio/Explosion.mp3`
 - **Sprites des voitures** : `data/assets/`
 
 ### Gestion des scores :
-- Les scores sont mis à jour dynamiquement dans **scores.csv**.
+- Les scores sont mis à jour dynamiquement dans `scores.csv`.
 - Seule la session la plus récente d’un joueur est mise à jour.
 
 ### Améliorations futures :
@@ -86,5 +86,7 @@ pip install -r requirements.txt
 ---
 
 ## Liens utiles
-- **Prototype Figma** : [Car Rhythm Game - Figma](#)
+- **Prototype Figma** : [Car Rhythm Game - Figma](https://www.figma.com/design/kj3WOnmfUVPsRU5jTDYrFH/Car-Rhythm-Game?node-id=0-1&m=dev&t=ZsFqjizqDA1D8xZb-1)
+
+
 

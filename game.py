@@ -1,31 +1,27 @@
 import pygame
-from pygame.locals import *
+import csv
 import random
 import subprocess
-import csv
+import sys
 from datetime import datetime
 
-# Variables globales pour l'utilisateur
-player_name = "Player"  # Ce nom doit être récupéré de `menu.py` dans un contexte intégré
-player_score = 0
-
-# Initialiser Pygame et la musique
+# Initialize Pygame and music
 pygame.init()
 pygame.mixer.init()
 
-# Dimensions de la fenêtre
+# Screen dimensions
 width, height = (444, 790)
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Car Game')
 
-# Charger et jouer la musique en boucle
+# Load and play background music on loop
 pygame.mixer.music.load("data/audio/Game.mp3")
 pygame.mixer.music.play(-1)
 
-# Charger le son d'explosion
+# Load explosion sound
 explosion_sound = pygame.mixer.Sound("data/audio/Explosion.mp3")
 
-# Couleurs pour l'interface
+# Colors for UI
 COLOR_BACKGROUND = (30, 30, 30)
 COLOR_ROAD = (50, 50, 70)
 COLOR_MARKER = (70, 70, 90)
@@ -34,18 +30,18 @@ COLOR_ORANGE = (255, 152, 0)
 COLOR_CRASH = (255, 0, 0)
 COLOR_BUTTON_TEXT = (255, 255, 255)
 
-# Largeur de la route et positions des voies
+# Road width and lane positions
 road_width = 300
 left_lane = 122
 center_lane = 222
 right_lane = 322
 lanes = [left_lane, center_lane, right_lane]
 
-# Position de départ du joueur
+# Initial player position
 player_x = 222
 player_y = 600
 
-# Variables de jeu
+# Game variables
 clock = pygame.time.Clock()
 fps = 120
 gameover = False
@@ -54,11 +50,15 @@ score = 0
 paused = False
 lane_marker_move_y = 0
 
-# Position pour le texte Start/Stop et bouton Menu
+# Start/Stop text position and Menu button rectangle
 start_stop_text_pos = (width - 100, 20)
 menu_button_rect = pygame.Rect(width // 2 - 75, height // 2 + 100, 150, 50)
 
-# Classes de véhicules
+# Retrieve player name and age from command line arguments
+player_name = sys.argv[1]  # Player's name passed from menu.py
+player_age = sys.argv[2]   # Player's age passed from menu.py
+
+# Classes for vehicles
 class Vehicle(pygame.sprite.Sprite):
     def __init__(self, image, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -74,78 +74,85 @@ class PlayerVehicle(Vehicle):
         image = pygame.image.load('data/assets/car.png')
         super().__init__(image, x, y)
 
-# Groupes de sprites pour le joueur et les autres véhicules
+# Sprite groups for player and other vehicles
 player_group = pygame.sprite.Group()
 vehicle_group = pygame.sprite.Group()
 
-# Création du véhicule joueur
+# Create the player vehicle
 player = PlayerVehicle(player_x, player_y)
 player_group.add(player)
 
-# Charger les images des autres véhicules
+# Load images of other vehicles
 image_filenames = ['pickup_truck.png', 'semi_trailer.png', 'taxi.png', 'van.png']
 vehicle_images = [pygame.image.load('data/assets/' + img) for img in image_filenames]
 
-# Charger l'image de crash
+# Load crash image
 crash = pygame.image.load('data/assets/crash.png')
 crash_rect = crash.get_rect()
 
-# Fonction pour enregistrer le score final dans scores.csv
-def save_score():
-    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open("scores.csv", "a", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow([player_name, "", current_date, score])
-
-# Fonction pour retourner au menu
+# Function to return to the menu
 def return_to_menu():
-    save_score()  # Sauvegarder le score avant de quitter
     pygame.quit()
     subprocess.call(["python", "menu.py"])
     exit()
 
-# Boucle principale du jeu
+# Function to update the score in the CSV file for the current player
+def update_score_in_csv(player_name, player_age, final_score):
+    updated_rows = []
+    found = False
+    with open("scores.csv", "r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row[0] == player_name and row[1] == player_age and row[3] == "0" and not found:
+                row[3] = str(final_score)  # Update score for the most recent game
+                found = True
+            updated_rows.append(row)
+
+    # Write back the updated rows to the CSV file
+    with open("scores.csv", "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerows(updated_rows)
+
+# Main game loop
 running = True
 while running:
     clock.tick(fps)
 
     for event in pygame.event.get():
-        if event.type == QUIT:
+        if event.type == pygame.QUIT:
             running = False
-        elif event.type == KEYDOWN:
-            if event.key == K_SPACE and not gameover:
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and not gameover:
                 paused = not paused
                 pygame.mixer.music.pause() if paused else pygame.mixer.music.unpause()
-            elif event.key == K_RETURN and gameover:  # Retour au menu depuis le Game Over
+            elif event.key == pygame.K_RETURN and gameover:
                 return_to_menu()
-            elif event.key == K_LEFT and not paused and not gameover and player.rect.center[0] > left_lane:
+            elif event.key == pygame.K_LEFT and not paused and not gameover and player.rect.center[0] > left_lane:
                 player.rect.x -= 100
-            elif event.key == K_RIGHT and not paused and not gameover and player.rect.center[0] < right_lane:
+            elif event.key == pygame.K_RIGHT and not paused and not gameover and player.rect.center[0] < right_lane:
                 player.rect.x += 100
-        elif event.type == MOUSEBUTTONDOWN:
-            # Vérifie si le bouton "Menu" est cliqué
+        elif event.type == pygame.MOUSEBUTTONDOWN:
             if gameover and menu_button_rect.collidepoint(event.pos):
                 return_to_menu()
-            # Vérifie si le texte Start/Stop est cliqué en haut à droite
             if start_stop_text_pos[0] <= event.pos[0] <= start_stop_text_pos[0] + 80 and start_stop_text_pos[1] <= event.pos[1] <= start_stop_text_pos[1] + 30 and not gameover:
                 paused = not paused
                 pygame.mixer.music.pause() if paused else pygame.mixer.music.unpause()
 
     if not paused and not gameover:
-        # Dessiner l'arrière-plan et la route
+        # Draw background and road
         screen.fill(COLOR_BACKGROUND)
         pygame.draw.rect(screen, COLOR_ROAD, (72, 0, road_width, height))
 
-        # Dessiner les marqueurs de voie
+        # Draw lane markers
         lane_marker_move_y = (lane_marker_move_y + speed * 2) % (50 * 2)
         for y in range(-100, height, 100):
             pygame.draw.rect(screen, COLOR_MARKER, (left_lane + 45, y + lane_marker_move_y, 10, 50))
             pygame.draw.rect(screen, COLOR_MARKER, (center_lane + 45, y + lane_marker_move_y, 10, 50))
 
-        # Mettre à jour et dessiner le joueur
+        # Update and draw the player
         player_group.draw(screen)
 
-        # Ajouter et déplacer les autres véhicules
+        # Add and move other vehicles
         if len(vehicle_group) < 2:
             if all(vehicle.rect.top >= vehicle.rect.height * 1.5 for vehicle in vehicle_group):
                 lane = random.choice(lanes)
@@ -162,43 +169,50 @@ while running:
                     speed += 1
         vehicle_group.draw(screen)
 
-        # Vérifier les collisions
+        # Check for collisions
         if pygame.sprite.spritecollide(player, vehicle_group, True):
             gameover = True
             pygame.mixer.music.stop()
             explosion_sound.play()
             crash_rect.center = player.rect.center
 
-    # Afficher le score en jeu
+            # Save final score to CSV for the current player
+            update_score_in_csv(player_name, player_age, score)
+
+    # Display the score in-game
     font = pygame.font.Font(pygame.font.get_default_font(), 24)
     score_text = font.render(f'Score: {score}', True, COLOR_TEXT)
     screen.blit(score_text, (20, 20))
 
-    # Afficher le texte "Start" ou "Stop" en haut à droite, similaire au score
+    # Display "Start" or "Stop" text in top-right, similar to the score
     start_stop_text = "Start" if paused else "Stop"
     start_stop_display = font.render(start_stop_text, True, COLOR_BUTTON_TEXT)
-    screen.blit(start_stop_display, start_stop_text_pos)
+    if not paused:
+        screen.blit(start_stop_display, start_stop_text_pos)
 
-    # Gestion du Game Over
+    # Handle Game Over
     if gameover:
-        # Afficher "GAME OVER" en haut
         screen.blit(crash, crash_rect)
         gameover_font = pygame.font.Font(None, 72)
         gameover_text = gameover_font.render("GAME OVER", True, COLOR_CRASH)
         screen.blit(gameover_text, gameover_text.get_rect(center=(width // 2, height // 2 - 100)))
 
-        # Afficher le score centré, en blanc, avec une taille de police plus grande
         score_font = pygame.font.Font(None, 48)
         final_score_text = score_font.render(f"Score : {score}", True, COLOR_BUTTON_TEXT)
         screen.blit(final_score_text, final_score_text.get_rect(center=(width // 2, height // 2)))
 
-        # Afficher le bouton "Menu" (style similaire au bouton Play)
         pygame.draw.rect(screen, COLOR_ORANGE, menu_button_rect, border_radius=10)
         button_text = font.render("Menu", True, COLOR_BUTTON_TEXT)
         screen.blit(button_text, button_text.get_rect(center=menu_button_rect.center))
 
+    # Display "Pause" text in center of screen if paused
+    if paused and not gameover:
+        pause_font = pygame.font.Font(pygame.font.get_default_font(), 48)
+        pause_text = pause_font.render("Pause", True, COLOR_ORANGE)
+        screen.blit(pause_text, pause_text.get_rect(center=(width // 2, height // 2)))
+
     pygame.display.update()
 
-# Quitter Pygame
+# Quit Pygame
 pygame.mixer.music.stop()
 pygame.quit()

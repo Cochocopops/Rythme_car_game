@@ -4,9 +4,13 @@
 
 **Rythme Car Game** est un jeu de rythme où les joueurs conduisent une voiture tout en évitant des obstacles sur la route, avec pour objectif d'obtenir le meilleur score. Le jeu inclut un menu interactif, un système de gestion des scores, et un gameplay immersif avec musique de fond et effets sonores.
 
-## Vidéo de démonstration
+## Vidéos de démonstration
 
-[![Gameplay Video](https://via.placeholder.com/800x450.png?text=Vid%C3%A9o+de+d%C3%A9monstration)](https://github.com/user-attachments/assets/6bf89fb6-f086-4fa7-92a2-c2b34a57e060)
+### Vidéo 1
+[Vidéo 1 - Lien GitHub](https://github.com/user-attachments/assets/6bf89fb6-f086-4fa7-92a2-c2b34a57e060)
+
+### Vidéo 2
+[Vidéo 2 - Lien GitHub](https://github.com/user-attachments/assets/fcab05fe-a906-4d64-b7c5-7173061e4e29)
 
 ---
 

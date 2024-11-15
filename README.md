@@ -1,72 +1,99 @@
-# Basic Race Car Game with Python
+Rythme Car Game - README
+Vue d'ensemble
+Rythme Car Game est un jeu de rythme où les joueurs conduisent une voiture tout en évitant des obstacles sur la route, avec pour objectif d'obtenir le meilleur score. Le jeu inclut un menu interactif, un système de gestion des scores, et un gameplay immersif avec musique de fond et effets sonores.
 
-## **Table of Contents**
+Fonctionnalités
+Menu dynamique :
 
-- [**Table of Contents**](#table-of-contents)
-- [**Description**](#description)
-- [**Usage**](#usage)
-- [**Technologies Used**](#technologies-used)
-- [**Preview**](#preview)
-- [**Deployed link**](#deployed-link)
-- [**Future Development**](#future-development)
-- [**Questions**](#questions)
+Fond animé avec un GIF.
+Musique de fond : "Night Rider".
+Champs pour saisir le nom et l'âge du joueur.
+Affichage du meilleur score des sessions précédentes.
+Accès au tableau des 5 meilleurs scores.
+Mécanismes de jeu :
 
-## **Description**
+Contrôlez une voiture qui peut changer de voie.
+Des véhicules apparaissent aléatoirement en tant qu'obstacles.
+La partie se termine en cas de collision.
+La difficulté augmente avec le score.
+Écran de fin de partie :
 
-This project was created as a learning experience of Python.
+Affiche le score final du joueur.
+Option pour retourner au menu.
+Pause :
 
-Using Pygame I created a 2D basic race car game, where the user needs to avoid collision with the other car.
+Mettez le jeu en pause ou reprenez avec la barre d'espace.
+Gestion des scores :
 
-## **Usage**
+Les scores des joueurs sont sauvegardés dans un fichier CSV.
+Les meilleurs scores sont affichés dans le menu.
+Pré-requis
+Le projet nécessite les dépendances suivantes (listées dans requirements.txt) :
 
-Install Python https://www.python.org/downloads/ (only for users that do not have it yet)
+Pillow (11.0.0) - Pour le traitement des GIFs.
+pygame (2.6.1) - Pour le développement du jeu.
+Installez les dépendances avec :
 
-#### Install Pygame
+bash
+Copier le code
+pip install -r requirements.txt
+Structure des fichiers
+menu.py :
+Gère l'interface du menu et les données des joueurs.
 
-Open the console by typing Command Prompt, then insert: 
-```
-pip install pygame
-```
-To check the details of installation and version:
-```
-pip show pygame
-```
-#### To start the game run in the console
-```
-python main.py  
-```
+game.py :
+Contient la logique principale et les mécanismes du jeu.
 
-#### To start playing:
+scores.csv :
+Enregistre les noms, âges, dates, et scores des joueurs.
 
-* To  move your car sideways press the left or right arrows, or use "a" for left and "d" for right.
-* The speed will increase and you will level up.
-* The game will end when the opponent car collides with you car.
-* You can see your results in the console. 
+requirements.txt :
+Liste les dépendances du projet.
 
-## **Technologies Used**
+Comment jouer
+Assurez-vous que Python (version >= 3.7) est installé.
+Installez les dépendances requises :
+bash
+Copier le code
+pip install -r requirements.txt
+Lancez le jeu en démarrant par le menu :
+bash
+Copier le code
+python menu.py
+Instructions de jeu
+Navigation dans le menu :
 
-* Python
-* Pygame
+Entrez votre nom et votre âge.
+Cliquez sur "Play" ou appuyez sur Entrée pour commencer la partie.
+Accédez aux 5 meilleurs scores en cliquant sur le bouton "Scores".
+Contrôles du jeu :
+
+Déplacer la voiture à gauche : Flèche gauche.
+Déplacer la voiture à droite : Flèche droite.
+Pause/Reprendre : Barre d'espace.
+Retourner au menu : Touche Entrée (après "Game Over").
+Objectif :
+
+Évitez les collisions et obtenez le score le plus élevé possible.
+Notes pour les développeurs
+Assets utilisés :
+
+Fond GIF : data/assets/Intro.gif
+Musique :
+Menu : data/audio/Night Rider.mp3
+Jeu : data/audio/Game.mp3
+Collision : data/audio/Explosion.mp3
+Sprites des voitures : data/assets/
+Gestion des scores :
+
+Les scores sont mis à jour dynamiquement dans scores.csv.
+Seule la session la plus récente d’un joueur est mise à jour.
+Améliorations futures
+Ajouter davantage de types de véhicules et des obstacles dynamiques.
+Implémenter un mode multijoueur.
+Améliorer les visuels et les animations des collisions.
+Liens utiles
+Prototype Figma :
+Car Rhythm Game - Figma
 
 
-## **Preview**
-
-* **Game screen**
-
-![Game](assets/img/game2-screen.png)
-![Game](assets/img/screen-game.png)
-
-* **Console results**
-
-![Game](assets/img/console-results.png)
-
-## **Future Development**
-
-* Display messages on screen everytime you level up.
-* Display the end results on the screen.
-* Create more animations.
-* GUI version
-
-## **Questions**
-
-* Contact me on my GitHub profile: [Marcela's GitHub](https://github.com/marcelamejiao)
